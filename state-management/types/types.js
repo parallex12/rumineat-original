@@ -1,0 +1,14 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const DO_LOGIN = "DO_LOGIN";
+export const DO_LOGOUT = "DO_LOGOUT";
+export const DO_SIGNUP = "DO_SIGNUP";
+export const GET_USER_DETAILS = "GET_USER_DETAILS";
+export const GET_ALL_MATCHES = "GET_ALL_MATCHES";
+export const GET_MY_MATCHES = "GET_MY_MATCHES";
+export const GET_MY_GROUPS = "GET_MY_GROUPS";
+export const GET_MESSAGES = "GET_MESSAGES";
+export const CURRENT_SESSION = "CURRENT_SESSION";
+export const CURRENT_SESSION_TOKEN = "CURRENT_SESSION_TOKEN";
+export const CURRENT_USER = "CURRENT_USER";
+export const GET_PLACES = "GET_PLACES";
+export const GET_DECISIONS = "GET_DECISIONS";
