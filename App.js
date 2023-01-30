@@ -12,6 +12,7 @@ import { firebaseConfig } from "./firebaseConfig.js";
 import { useFonts } from "expo-font";
 import { UnAuthNavigator } from "./routes/UnAuthNavigator";
 import axios from "axios";
+
 export default function App() {
   const [status, setStatus] = useState(false);
 
