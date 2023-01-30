@@ -30,8 +30,8 @@ const Statistics = (props) => {
     });
     // latitude: JSON.parse(data?.location)?.latitude,
     // longitude: JSON.parse(data?.location)?.longitude,
-    const latLng = `${40.7128},${-74.006}`;
-    const label = "New York";
+    const latLng = `${props?.get_result?.result?.place?.latitude},${props?.get_result?.result?.place?.longitude}`;
+    const label = props?.get_result?.result?.place?.name;
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`,
@@ -39,6 +39,8 @@ const Statistics = (props) => {
 
     Linking.openURL(url);
   };
+
+  console.log(props?.get_result?.result?.place?.latitude)
 
   return (
     <View style={styles.container}>
@@ -51,30 +53,22 @@ const Statistics = (props) => {
         <View style={styles.TableCard}>
           <View style={styles.TableHeader}>
             <View style={styles.Row1}>
-              <Text style={styles.Font}>Place</Text>
+              <Text style={styles.Font}>Rating</Text>
             </View>
             <View style={styles.Row2}>
-              <Text style={styles.Font}>Fequency</Text>
+              <Text style={styles.Font}>Place</Text>
             </View>
           </View>
-          <StatisticCard
-            place="Qtaba"
-            Num="2"
-            bgColor={appTheme?.primaryBackroundLigh}
-          />
-          <StatisticCard place="Qtaba" Num="2" />
-          <StatisticCard
-            place="Qtaba"
-            Num="2"
-            bgColor={appTheme?.primaryBackroundLigh}
-          />
-          <StatisticCard place="Qtaba" Num="2" />
-          <StatisticCard
-            place="Qtaba"
-            Num="2"
-            bgColor={appTheme?.primaryBackroundLigh}
-          />
-          <StatisticCard place="Qtaba" Num="2" />
+          {props?.get_result?.extra?.map((item, index) => {
+            return (
+              <StatisticCard
+                place={item?.name}
+                Num={item?.rating}
+                key={index}
+                bgColor={appTheme?.primaryBackroundLigh}
+              />
+            );
+          })}
         </View>
       </View>
       {/* Buttons Row start here */}
@@ -145,7 +139,7 @@ const styles = StyleSheet.create({
   },
   TableCard: {
     width: wp("90%"),
-    height: hp("45%"),
+    minHeight: hp("5%"),
     borderRadius: 10,
     backgroundColor: appTheme?.primaryBackroundLightGrey,
   },
@@ -175,5 +169,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   errors: state.errors.errors,
+  get_result: state.main.get_result,
 });
 export default connect(mapStateToProps)(Statistics);

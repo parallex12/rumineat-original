@@ -16,10 +16,15 @@ import { connect } from "react-redux";
 import Header from "../../components/Header";
 import { appTheme } from "../../constants/Theme";
 import GlobalButton from "../../components/GlobalButton";
-
+import { startTigger } from "../../state-management/actions/Features/Actions";
 const Guide2 = (props) => {
   const [loading, setLoading] = useState(false);
   let data = props?.route?.params?.data;
+  const onNext = () => {
+    setLoading(true);
+    props?.startTigger(setLoading, data, props?.navigation);
+  };
+
   return (
     <View style={styles.container}>
       <Header navigation={props?.navigation} />
@@ -50,10 +55,7 @@ const Guide2 = (props) => {
       </View>
       <Text style={styles.SwipeTxt}>Swipe Right to dislike</Text>
       <View style={styles.BtnRow}>
-        <GlobalButton
-          Title="Next"
-          onPress={() => props?.navigation.navigate("Discover",{data:data})}
-        />
+        <GlobalButton Title="Next" onPress={() => onNext()} />
       </View>
     </View>
   );
@@ -100,4 +102,4 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   errors: state.errors.errors,
 });
-export default connect(mapStateToProps)(Guide2);
+export default connect(mapStateToProps, { startTigger })(Guide2);

@@ -21,10 +21,10 @@ const StatisticCard = (props) => {
   return (
     <View style={[styles.container, { backgroundColor: props?.bgColor }]}>
       <View style={styles.Row1}>
-        <Text style={styles.Font}>{props?.place}</Text>
+        <Text style={styles.Font}>{props?.Num}</Text>
       </View>
       <View style={styles.Row2}>
-        <Text style={styles.Font2}>{props?.Num}</Text>
+        <Text style={styles.Font2}>{props?.place}</Text>
       </View>
     </View>
   );

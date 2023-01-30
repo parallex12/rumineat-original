@@ -20,22 +20,36 @@ import { appTheme } from "../../constants/Theme";
 import GlobalButton from "../../components/GlobalButton";
 import DiscoverCard from "../../components/DiscoverCard";
 import BottomMenu from "../../components/BottomMenu";
-import { getDecisions } from "../../state-management/actions/Features/Actions";
+import {
+  getDecisions,
+  getResult,
+} from "../../state-management/actions/Features/Actions";
 import { LinearGradient } from "expo-linear-gradient";
 const Result = (props) => {
   let id = props?.route?.params?.id;
   const [loading, setLoading] = useState(true);
+  const [finalResult, setFinalResult] = useState(null);
   const [decisions, setDecisions] = useState([]);
 
   useEffect(() => {
-    props?.getDecisions(id, setLoading);
+    props?.getResult(id, setLoading);
   }, []);
 
   useEffect(() => {
-    if (props?.decisions != null) {
-      setDecisions(props?.decisions);
+    if (props?.get_result != null) {
+      setDecisions(props?.get_result);
     }
-  }, [props?.decisions]);
+  }, [props?.get_result]);
+
+  useEffect(() => {
+    if (props?.get_result != null) {
+      let result = props?.get_places?.places?.filter((e) => {
+        return e.id == props?.get_result?.result?.place_id;
+      });
+      setFinalResult(result[0]);
+    }
+  }, [props?.get_result]);
+
 
   const onMapOpen = () => {
     const scheme = Platform.select({
@@ -64,9 +78,9 @@ const Result = (props) => {
         <ActivityIndicator color="#222" size="large" />
       ) : (
         <View style={styles.CardRow}>
-          {decisions?.map((item, index) => {
-            return <DiscoverCard data={item} key={index} />;
-          })}
+          {/* {decisions?.map((item, index) => {
+          })} */}
+          {finalResult != null && <DiscoverCard data={finalResult} />}
         </View>
       )}
       {/* Buttons Row start here */}
@@ -142,5 +156,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   errors: state.errors.errors,
   get_decisions: state.main.get_decisions,
+  get_result: state.main.get_result,
+  get_places: state.main.get_places,
 });
-export default connect(mapStateToProps, { getDecisions })(Result);
+export default connect(mapStateToProps, { getDecisions, getResult })(Result);

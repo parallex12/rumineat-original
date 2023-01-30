@@ -12,6 +12,8 @@ import {
   CURRENT_SESSION_TOKEN,
   GET_PLACES,
   GET_DECISIONS,
+  GET_SESSION_STARTDATA,
+  GET_RESULT,
 } from "../types/types";
 const initialState = {
   login_details: null,
@@ -26,6 +28,8 @@ const initialState = {
   current_user: null,
   get_places: null,
   get_decisions: null,
+  get_session_startdata: null,
+  get_result:null
 };
 const mainReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -33,6 +37,16 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         login_details: action.payload,
+      };
+    case GET_RESULT:
+      return {
+        ...state,
+        get_result: action.payload,
+      };
+    case GET_SESSION_STARTDATA:
+      return {
+        ...state,
+        get_session_startdata: action.payload,
       };
     case CURRENT_SESSION:
       return {

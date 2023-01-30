@@ -13,16 +13,20 @@ import {
   CURRENT_SESSION_TOKEN,
   GET_PLACES,
   GET_DECISIONS,
+  GET_SESSION_STARTDATA,
+  GET_RESULT,
 } from "../../types/types";
 import { getAuth } from "firebase/auth";
 import { getFirestore, onSnapshot } from "firebase/firestore";
 import axios from "axios";
+import setAuthToken from "../../SetAuthToken";
 
 export const createSession = (data) => async (dispatch) => {
   try {
     axios
       .post("/sessions", data)
       .then((res) => {
+        setAuthToken(res.data?.token);
         dispatch({
           type: CURRENT_SESSION_TOKEN,
           payload: res.data,
@@ -36,6 +40,35 @@ export const createSession = (data) => async (dispatch) => {
     dispatch({ type: GET_ERRORS, payload: e.message });
   }
 };
+
+export const startTigger =
+  (setLoading, data, navigation) => async (dispatch) => {
+    try {
+      axios
+        .put(`/sessions/${data?.jwtDecode?.session_id}`, { start: "true" })
+        .then((res) => {
+          if (res.data?.started) {
+            dispatch({
+              type: GET_SESSION_STARTDATA,
+              payload: res.data,
+            });
+            setLoading(false);
+            navigation.navigate("Discover", {
+              data: data,
+              session_start_data: res.data,
+            });
+          }
+        })
+        .catch((e) => {
+          setLoading(false);
+          console.log(e.message);
+        });
+    } catch (e) {
+      console.log(e.message);
+      setLoading(false);
+      dispatch({ type: GET_ERRORS, payload: e.message });
+    }
+  };
 
 export const addCurrentUserDetailsFromRuby =
   (id, setLoading) => async (dispatch) => {
@@ -129,12 +162,34 @@ export const onSwipe = (id, data, token) => async (dispatch) => {
 export const getDecisions = (id, setLoading) => async (dispatch) => {
   try {
     axios
-    .get(`/sessions/${id}/decisions`)
-    .then((res) => {
-      dispatch({
-        type: GET_DECISIONS,
-        payload: res.data,
+      .get(`/sessions/${id}/decisions`)
+      .then((res) => {
+        dispatch({
+          type: GET_DECISIONS,
+          payload: res.data,
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e.message);
+        setLoading(false);
       });
+  } catch (e) {
+    console.log(e.message);
+    setLoading(false);
+    dispatch({ type: GET_ERRORS, payload: e.message });
+  }
+};
+
+export const getResult = (id, setLoading) => async (dispatch) => {
+  try {
+    axios
+      .get(`/sessions/${id}/result`)
+      .then((res) => {
+        dispatch({
+          type: GET_RESULT,
+          payload: res.data,
+        });
         setLoading(false);
       })
       .catch((e) => {
